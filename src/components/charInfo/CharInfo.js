@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import PropTypes from 'prop-types'
 
@@ -9,79 +9,64 @@ import Skeleton from '../skeleton/Skeleton';
 import './charInfo.scss';
 import MarvelService from '../../services/MarvelService';
 
-class CharInfo extends Component {
+const CharInfo = (props) => {
     
-    state = {
-        char: null,
-        loading: false,
-        error: false
-    }
+    const [char, setChar] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
-    marvelService = new MarvelService();
+    const marvelService = new MarvelService();
 
-    componentDidMount() {
-        this.updateChar();
-    }
+    useEffect(() => {
+        updateChar();
+    }, [])
 
-    componentDidUpdate(prevProps) {
-        if(this.props.charId !== prevProps.charId) {
-            this.updateChar();
-        }
-    }
+    useEffect(() => {
+        updateChar();
+    }, [props.charId])
 
-    updateChar = () => {
-        const {charId} = this.props;
+    const updateChar = () => {
+        const {charId} = props;
         if(!charId) return;
         
-        this.onCharLoading();
+        onCharLoading();
 
-        this.marvelService
+        marvelService
             .getCharacter(charId)
-            .then(this.onCharactersLoaded)
-            .catch(this.onError)
+            .then(onCharactersLoaded)
+            .catch(onError)
         
     }
 
-    onCharLoading = () => {
-        this.setState({
-            loading: true
-        })
+    const onCharLoading = () => {
+        setLoading(true)
     }
 
     /* Когда загрузился, записываем персон в стейт */
-    onCharactersLoaded = (char) => {
-        this.setState({
-            char,
-            loading: false
-        })
+    const onCharactersLoaded = (char) => {
+        setChar(char);
+        setLoading(false);
     }
     /* При ерроре показываем еррор и останавливаем загрузку */
-    onError = () => {
-        this.setState({
-            error: true,
-            loading: false
-        })
+    const onError = () => {
+        setError(true)
+        setLoading(false)
     }
-
     
-    render() {
-        const {char, loading, error} = this.state;
+    /* Условные отрисовки */
+    const skeleton = char || loading || error ? null : <Skeleton/>
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spinner = loading ? <Spinner/> : null;
+    const content = !(loading || error || !char) ? <View char={char}/> : null
 
-        /* Условные отрисовки */
-        const skeleton = char || loading || error ? null : <Skeleton/>
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const spinner = loading ? <Spinner/> : null;
-        const content = !(loading || error || !char) ? <View char={char}/> : null
-
-        return (
-            <div className="char__info">
-                {skeleton}
-                {errorMessage}
-                {spinner}
-                {content}
-            </div>
-        )
-    }
+    return (
+        <div className="char__info">
+            {skeleton}
+            {errorMessage}
+            {spinner}
+            {content}
+        </div>
+    )
 }
 
 /* Это глупый компонент который работает только с пропсами и вырисовывает то что нужно */
