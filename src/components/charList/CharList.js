@@ -9,34 +9,24 @@ import './charList.scss';
 const CharList = (props) => {
 
     const [charList, setCharList] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [offset, setOffset] = useState(1541);
     const [charEnded, setCharEnded] = useState(false);
 
-    const marvelService = useMarvelService();
+    const {loading, error, getAllCharacters} = useMarvelService();
 
     /* Когда замаунтился компонент */
     useEffect(() => {
-        onRequest();
+        onRequest(offset, true);
     }, [])
     
     /* Метод который отвечает за запрос на сервер, первый раз вызывается при рендере */
-    const onRequest = (offset) => {
-        /* В первый раз вызова это ни на что не влияет, потом же мы будем кидать с помощью этого метода атрибут кнопке disabled */
-        onCharListLoading();
+    const onRequest = (offset, initial) => {
+        initial ? setNewItemLoading(false) : setNewItemLoading(true);
         /* Отправляем запрос */
-        marvelService
-        .getAllCharacters(offset)
-        /* Записываем новые поля в стейт */
-        .then(onCharactersLoaded)
-        /* Краш */
-        .catch(onError)
-    }
-    
-   const onCharListLoading = () => {
-        setNewItemLoading(true);
+        getAllCharacters(offset)
+            /* Записываем новые поля в стейт */
+            .then(onCharactersLoaded)
     }
     
     /* Когда загрузился, записываем новых персон в стейт */
@@ -47,22 +37,13 @@ const CharList = (props) => {
         /* Записываем в стейт относительно старого стейта */
         /* Конкатинируем старый массив персонажей и добавляем новых */
         setCharList(charList => [...charList, ...newCharList]);
-        /* Поля записались, выключаем загрузку */
-        setLoading(loading => false);
         setNewItemLoading(newItemLoading => false)
         setOffset(offset => offset + 9)
         setCharEnded(charEnded => ended)
     }
-    /* При ерроре показываем еррор и останавливаем загрузку */
-    const onError = () => {
-        setError(true);
-        setLoading(false);
-    }
 
     /* Создаем массив пустой рефов */
     const charRefs = useRef([])
-
-
 
     /* Удаляем всем актив стиль и добавляем нужному, ставим фокус */
     const focusOnItem = (i) => {
@@ -116,15 +97,15 @@ const CharList = (props) => {
 
     const items = renderItems(charList)
 
-    const spinner = loading ? <Spinner/> : null
+    const spinner = loading && !newItemLoading ? <Spinner/> : null
     const errorMessage = error ? <ErrorMessage/> : null
-    const content = !(loading || error) ? items : null
+    // const content = !(loading || error) ? items : null
 
     return (
         <div className="char__list">
             {spinner}
             {errorMessage}
-            {content}
+            {items}
             <button 
             className="button button__main button__long"
             disabled={newItemLoading}
