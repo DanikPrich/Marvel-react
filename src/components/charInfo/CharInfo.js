@@ -19,10 +19,12 @@ const CharInfo = (props) => {
 
     useEffect(() => {
         updateChar();
+        //eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         updateChar();
+        //eslint-disable-next-line
     }, [props.charId])
 
     const updateChar = () => {
@@ -85,9 +87,11 @@ const View = ({char}) => {
                 <div>
                     <div className="char__info-name">{name}</div>
                     <div className="char__btns">
+                        {/* eslint-disable-next-line */}
                         <a href={homepage} className="button button__main" target="_blank">
                             <div className="inner">homepage</div>
                         </a>
+                        {/* eslint-disable-next-line */}
                         <a href={wiki} className="button button__secondary" target="_blank">
                             <div className="inner">Wiki</div>
                         </a>
