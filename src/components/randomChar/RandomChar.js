@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
@@ -10,46 +10,32 @@ import mjolnir from '../../resources/img/mjolnir.png';
 const RandomChar = () => {
 
     const [char, setChar] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const {loading, error, getCharacter} = useMarvelService();
+    // const [loading, setLoading] = useState(true);
+    // const [error, setError] = useState(false);
 
     useEffect(() => {
         updateChar();
         // eslint-disable-next-line
     }, [])
 
-    const marvelService = new MarvelService();
 
     /* Запись персонажа в стор */
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false)
     }
 
-    /* При ошибке прекращает загрузку и показывает ошибку */
-    const onError = () => {
-        setLoading(false);
-        setError(true);
-    }
     /* Отправляет запрос на рандомного персонажа с рандомным айди, записывает в стор и если ошибка кидает ошибку */
     const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-        marvelService
-            .getCharacter(id)
-            .then(onCharLoaded)
-            .catch(onError);
-    }
-
-    const onReloadChar = () => {
-        setLoading(true)
-        updateChar();
+        getCharacter(id)
+            .then(onCharLoaded);
     }
 
     /* Условные отрисовки */
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error) ? <View char={char}/> : null
-
+    const content = !(loading || error || !char) ? <View char={char}/> : null
     return (
         <div className="randomchar">
             {errorMessage}
@@ -64,7 +50,7 @@ const RandomChar = () => {
                     Or choose another one
                 </p>
                 <button className="button button__main"
-                onClick={onReloadChar}>
+                onClick={updateChar}>
                     <div className="inner">try it</div>
                 </button>
                 <img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
@@ -78,11 +64,11 @@ const View = ({char}) => {
 
     const {name, description, thumbnail, homepage, wiki} = char
 
-    const imgNotFoud = thumbnail.indexOf('image_not_available') > 0
+    const imgNotFoud = !thumbnail || thumbnail.indexOf('image_not_available') > 0 ? {objectFit:"contain"} : null;
 
     return (
         <div className="randomchar__block">
-            <img src={thumbnail} alt="Random character" className="randomchar__img" style={imgNotFoud ? {objectFit:"contain"} : null}/>
+            <img src={thumbnail} alt="Random character" className="randomchar__img" style={imgNotFoud}/>
             <div className="randomchar__info">
                 <p className="randomchar__name">{name}</p>
                 <p className="randomchar__descr">

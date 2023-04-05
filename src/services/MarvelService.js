@@ -49,3 +49,4 @@ const useMarvelService = () => {
 }
 
 export default useMarvelService;
+
