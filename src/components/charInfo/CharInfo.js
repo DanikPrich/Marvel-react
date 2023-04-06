@@ -7,20 +7,13 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 
 import './charInfo.scss';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 const CharInfo = (props) => {
     
     const [char, setChar] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
 
-    const marvelService = new MarvelService();
-
-    useEffect(() => {
-        updateChar();
-        //eslint-disable-next-line
-    }, [])
+    const {loading, error, getCharacter} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -31,28 +24,15 @@ const CharInfo = (props) => {
         const {charId} = props;
         if(!charId) return;
         
-        onCharLoading();
-
-        marvelService
-            .getCharacter(charId)
+        getCharacter(charId)
             .then(onCharactersLoaded)
-            .catch(onError)
         
     }
 
-    const onCharLoading = () => {
-        setLoading(true)
-    }
 
     /* Когда загрузился, записываем персон в стейт */
     const onCharactersLoaded = (char) => {
         setChar(char);
-        setLoading(false);
-    }
-    /* При ерроре показываем еррор и останавливаем загрузку */
-    const onError = () => {
-        setError(true)
-        setLoading(false)
     }
     
     /* Условные отрисовки */
