@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useTransition, startTransition} from 'react'
 
 import useMarvelService from '../../services/MarvelService'
 import Spinner from '../spinner/Spinner';
@@ -7,7 +7,6 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import './comicsList.scss';
 
 const ComicsList = () => {
-
     const [comicsList, setComicsList] = useState([]);
     const [newItemLoading, setNewItemLoading] = useState(false);
     const [offset, setOffset] = useState(8);
@@ -72,6 +71,7 @@ const ComicsList = () => {
                 onClick={() => onRequest(offset)}>
                 <div className="inner">load more</div>
             </button>
+
         </div>
     )
 }
