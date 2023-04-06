@@ -9,8 +9,8 @@ import mjolnir from '../../resources/img/mjolnir.png';
 /* Умный компонент, записывает стор и работает с логикой */
 const RandomChar = () => {
 
-    const [char, setChar] = useState({});
-    const {loading, error, getCharacter} = useMarvelService();
+    const [char, setChar] = useState(null);
+    const {loading, error, getCharacter, clearError} = useMarvelService();
     // const [loading, setLoading] = useState(true);
     // const [error, setError] = useState(false);
 
@@ -27,6 +27,7 @@ const RandomChar = () => {
 
     /* Отправляет запрос на рандомного персонажа с рандомным айди, записывает в стор и если ошибка кидает ошибку */
     const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
         getCharacter(id)
             .then(onCharLoaded);
@@ -64,7 +65,7 @@ const View = ({char}) => {
 
     const {name, description, thumbnail, homepage, wiki} = char
 
-    const imgNotFoud = !thumbnail || thumbnail.indexOf('image_not_available') > 0 ? {objectFit:"contain"} : null;
+    const imgNotFoud = thumbnail && thumbnail.indexOf('image_not_available') > 0 ? {objectFit:"contain"} : null;
 
     return (
         <div className="randomchar__block">
