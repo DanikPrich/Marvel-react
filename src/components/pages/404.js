@@ -8,7 +8,7 @@ const Page404 = () => {
         alt="Page not found" 
         style={{width: 500}}/>
       <Link 
-        to="/"
+        to=".."
         style={{display: 'block', textAlign: 'center', fontWeight: 'bold', 'fontSize': 38, textDecoration: 'underline', marginTop: 50, color: '#9F0013'}}>
           Back to main page</Link>
     </div>
