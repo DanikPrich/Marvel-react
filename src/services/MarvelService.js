@@ -8,17 +8,6 @@ const useMarvelService = () => {
   const _apiKey = 'apikey=a4fdd89c59c787a3f9c7e4daf01647a8';
   const _baseOffset = 210;
 
-
-//  getResource = async (url) => {
-//     let res = await fetch(url);
-
-//     if (!res.ok) {
-//       throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-//     }
-
-//     return await res.json();
-//   }
-
   const getAllCharacters = async (offset = _baseOffset) => {
     const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKeyTemp}`);
     /* Создаем массив с удобными для нас обьектами */
@@ -36,7 +25,7 @@ const useMarvelService = () => {
     return res.data.results.map(_transformComics)
   }
 
-  const getComics = async (id) => {
+  const getComic = async (id) => {
 		const res = await request(`${_apiBase}comics/${id}?${_apiKeyTemp}`);
 		return _transformComics(res.data.results[0]);
 	};
@@ -60,14 +49,14 @@ const useMarvelService = () => {
       id: comics.id,
       title: comics.title,
       description: comics.description ? comics.description.slice(0, comics.description.slice(0, 170).lastIndexOf(' ')) + '...' : "Description is missing...",
-      pageCount: comics.pageCount ? `${comics.pageCount} pages` : "Not avialable",
-      languages: comics.textObjects.length > 1 ? `Language: ${comics.textObjects[0].language}` : "Not avialable", 
+      pageCount: comics.pageCount ? `${comics.pageCount}` : "Not avialable",
+      language: comics.textObjects.length > 1 ? `${comics.textObjects[0].language}` : "Not avialable", 
       thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
       price: comics.prices[0].price ?  `${comics.prices[0].price}$` : "Not avialable"
     }
   }
 
-  return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics }
+  return {loading, error, getAllCharacters, getCharacter, clearError, getAllComics, getComic }
 }
 
 export default useMarvelService;
