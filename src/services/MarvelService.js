@@ -50,7 +50,7 @@ const useMarvelService = () => {
       title: comics.title,
       description: comics.description ? comics.description.slice(0, comics.description.slice(0, 170).lastIndexOf(' ')) + '...' : "Description is missing...",
       pageCount: comics.pageCount ? `${comics.pageCount}` : "Not avialable",
-      language: comics.textObjects.length > 1 ? `${comics.textObjects[0].language}` : "Not avialable", 
+      language: comics.textObjects.length > 1 ? `${comics.textObjects[0].language}` : "en-us", 
       thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
       price: comics.prices[0].price ?  `${comics.prices[0].price}$` : "Not avialable"
     }
