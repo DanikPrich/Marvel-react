@@ -4,6 +4,8 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import useMarvelService from '../../services/MarvelService';
 
+import { Transition, TransitionGroup } from 'react-transition-group';
+
 import './charList.scss';
 
 const CharList = (props) => {
@@ -52,6 +54,25 @@ const CharList = (props) => {
         charRefs.current[i].focus(); 
     }
 
+    const duration = 2000;
+
+    // дефолтные стили которые устанавливают длительность  
+    const defaultStyle = {
+        transition: `all ${duration}ms ease-in-out`,
+        opacity: 0,
+        visibility: 'hidden'
+    }
+
+    //Стили которые будут на переходных этапах
+    //здесь описаны четыре состояния для появления и исчезновения
+    // используем visibility потому что display none/block нельзя анимировать
+    const transitionStyles = {
+        entering: { opacity: 0, visibility: 'hidden' },
+        entered: { opacity: 1, visibility: 'visible' },
+        exiting: { opacity: 1, visibility: 'visible' },
+        exited: { opacity: 0, visibility: 'hidden' },
+    }
+
     const renderItems = (charList) => {
         /* Создаем новый массив на базе прежних */
         const items = charList.map((item,i) => {
@@ -60,37 +81,51 @@ const CharList = (props) => {
                 ? {'objectFit' : 'unset'}
                 : {'objectFit' : 'cover'}
 
+            /* Вернем массив из элементов */
             return (
-                /* Вернем массив из элементов */
-                <li className="char__item" 
-                /* Пушим в массив рефы айтемов */
-                ref={el => charRefs.current[i] = el}
-                key={item.id}
-                /* При клике ставим фокус и вызываем функцию из пропса */
-                onClick={() => {
-                    props.onCharSelected(item.id);
-                    focusOnItem(i)
-                }}
-                /* При нажатии ентера или е ставим фокус и вызываем ф из пропса */
-                onKeyDown={(e) => {
-                    if(e.key === "Enter" || e.key === 'e') {
-                        props.onCharSelected(item.id); 
-                        focusOnItem(i);
-                    }
-                }}
-                /* Чтобы можно было через таб перемещаться к элементу */
-                tabIndex={0}
-                /* Вызываем функцию рефов и передаем выбранный элемент */
+                <Transition 
+                    timeout={duration} 
+                    key={item.id}
                 >
-                    <img src={item.thumbnail} alt="abyss" style={imgStyle}/>
-                    <div className="char__name">{item.name}</div>
-                </li>
+                    {(state) => {
+                        console.log(state)
+                        return (
+                        <li className="char__item" 
+                        style={{
+                            ...defaultStyle,
+                            ...transitionStyles[state]
+                        }}
+                        /* Пушим в массив рефы айтемов */
+                        ref={el => charRefs.current[i] = el}
+                        /* При клике ставим фокус и вызываем функцию из пропса */
+                        onClick={() => {
+                            props.onCharSelected(item.id);
+                            focusOnItem(i)
+                        }}
+                        /* При нажатии ентера или е ставим фокус и вызываем ф из пропса */
+                        onKeyDown={(e) => {
+                            if(e.key === "Enter" || e.key === 'e') {
+                                props.onCharSelected(item.id); 
+                                focusOnItem(i);
+                            }
+                        }}
+                        /* Чтобы можно было через таб перемещаться к элементу */
+                        tabIndex={0}
+                        /* Вызываем функцию рефов и передаем выбранный элемент */
+                        >
+                            <img src={item.thumbnail} alt="abyss" style={imgStyle}/>
+                            <div className="char__name">{item.name}</div>
+                        </li>
+                    )}}
+                </Transition>
             )
         })
         /* Массив будет находится в теге и конкатинироваться внутри (добавляться по очереди) */
         return (
             <ul className="char__grid">
-                {items}
+                <TransitionGroup component={null}>
+                    {items}
+                </TransitionGroup>
             </ul>
         )
     }
