@@ -1,58 +1,10 @@
-import { useParams, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-
-import useMarvelService from '../../services/MarvelService'
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
+import { Link } from 'react-router-dom';
 
 import './singleComicPage.scss';
 
-const SingleComicPage = () => {
-  /* Достаем переменную comicId из обьекта с параметрами */
-  const { comicId } = useParams();
-  const [comic, setComic] = useState({desctiption: "hello"});
-
-  const {loading, error, getComic, clearError} = useMarvelService();
-
-  useEffect(() => {
-    updateComic();
-
-    /* Обновляем комикс при изменении айди */
-    //eslint-disable-next-line
-  }, [comicId])
-
-  const updateComic = () => {
-      clearError();      
-      getComic(comicId)
-          .then(onComicLoaded)
-      
-  }
-
-
-  /* Когда загрузился, записываем персон в стейт */
-  const onComicLoaded = (comic) => {
-    setComic(comic);
-  } 
-
-  /* Условные отрисовки */
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error || !comic) ? <View comic={comic}/> : null
+const SingleComicLayout = ({data}) => {
   
-  return (
-    <>
-      {errorMessage}
-      {spinner}
-      {content}
-    </>
-  )
-  
-}
-
-
-const View = ({comic}) => {
-
-  const {title, description, pageCount, thumbnail, language, price} = comic;
+  const {title, description, pageCount, thumbnail, language, price} = data;
 
   return (
     <div className="single-comic">
@@ -69,4 +21,4 @@ const View = ({comic}) => {
 )
 }
 
-export default SingleComicPage;
+export default SingleComicLayout;

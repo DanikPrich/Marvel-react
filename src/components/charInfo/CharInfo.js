@@ -81,7 +81,7 @@ const View = ({char}) => {
                 </div>
             </div>
             <div className="char__descr">
-                {description}
+                {description ? description.slice(0, char.description.slice(0, 170).lastIndexOf(' ')) + '...' : "Description is missing..."}
             </div>
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">

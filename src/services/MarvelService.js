@@ -15,6 +15,7 @@ const useMarvelService = () => {
   }
 
   const getCharacter = async (id) => {
+    console.log(id)
      const res = await request(`${_apiBase}characters/${id}?${_apiKeyTemp}`);
     /* Создаем массив с удобными для нас обьектами */
      return _transformCharacter(res.data.results[0]);
@@ -42,7 +43,7 @@ const useMarvelService = () => {
       id: char.id,
       name: char.name,
       /* Обрезаем до 170 символов или если пустой пишем что описание отсутствует */
-      description: char.description ? char.description.slice(0, char.description.slice(0, 170).lastIndexOf(' ')) + '...' : "Description is missing...",
+      description: char.description,
       thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension,
       homepage: char.urls[0].url,
       wiki: char.urls[1].url,
