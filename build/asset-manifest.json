@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ee07608a.chunk.css",
+    "main.js": "/static/js/main.621aa77e.chunk.js",
+    "main.js.map": "/static/js/main.621aa77e.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.22f0aaf7.js",
+    "runtime-main.js.map": "/static/js/runtime-main.22f0aaf7.js.map",
+    "static/js/2.abdac30d.chunk.js": "/static/js/2.abdac30d.chunk.js",
+    "static/js/2.abdac30d.chunk.js.map": "/static/js/2.abdac30d.chunk.js.map",
+    "static/css/3.c42bc0e8.chunk.css": "/static/css/3.c42bc0e8.chunk.css",
+    "static/js/3.02b5cec3.chunk.js": "/static/js/3.02b5cec3.chunk.js",
+    "static/js/3.02b5cec3.chunk.js.map": "/static/js/3.02b5cec3.chunk.js.map",
+    "static/css/4.6f619b6a.chunk.css": "/static/css/4.6f619b6a.chunk.css",
+    "static/js/4.d2f52b84.chunk.js": "/static/js/4.d2f52b84.chunk.js",
+    "static/js/4.d2f52b84.chunk.js.map": "/static/js/4.d2f52b84.chunk.js.map",
+    "static/css/5.7cf17460.chunk.css": "/static/css/5.7cf17460.chunk.css",
+    "static/js/5.cd900932.chunk.js": "/static/js/5.cd900932.chunk.js",
+    "static/js/5.cd900932.chunk.js.map": "/static/js/5.cd900932.chunk.js.map",
+    "static/js/6.675f548e.chunk.js": "/static/js/6.675f548e.chunk.js",
+    "static/js/6.675f548e.chunk.js.map": "/static/js/6.675f548e.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/3.c42bc0e8.chunk.css.map": "/static/css/3.c42bc0e8.chunk.css.map",
+    "static/css/4.6f619b6a.chunk.css.map": "/static/css/4.6f619b6a.chunk.css.map",
+    "static/css/5.7cf17460.chunk.css.map": "/static/css/5.7cf17460.chunk.css.map",
+    "static/css/main.ee07608a.chunk.css.map": "/static/css/main.ee07608a.chunk.css.map",
+    "static/js/2.abdac30d.chunk.js.LICENSE.txt": "/static/js/2.abdac30d.chunk.js.LICENSE.txt",
+    "static/js/3.02b5cec3.chunk.js.LICENSE.txt": "/static/js/3.02b5cec3.chunk.js.LICENSE.txt",
+    "static/js/4.d2f52b84.chunk.js.LICENSE.txt": "/static/js/4.d2f52b84.chunk.js.LICENSE.txt",
+    "static/js/5.cd900932.chunk.js.LICENSE.txt": "/static/js/5.cd900932.chunk.js.LICENSE.txt",
+    "static/media/Avengers.4065c8f9.png": "/static/media/Avengers.4065c8f9.png",
+    "static/media/Avengers_logo.9eaf2193.png": "/static/media/Avengers_logo.9eaf2193.png",
+    "static/media/error.42292aa1.gif": "/static/media/error.42292aa1.gif",
+    "static/media/mjolnir.61f31e18.png": "/static/media/mjolnir.61f31e18.png",
+    "static/media/vision.067d4ae1.png": "/static/media/vision.067d4ae1.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.22f0aaf7.js",
+    "static/js/2.abdac30d.chunk.js",
+    "static/css/main.ee07608a.chunk.css",
+    "static/js/main.621aa77e.chunk.js"
+  ]
+}

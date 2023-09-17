@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+import { useState, useEffect} from 'react';
 
 import PropTypes from 'prop-types'
 
@@ -88,11 +90,13 @@ const View = ({char}) => {
                 }
                 {
                     comics.map((item, i) => {
+                        const comicURI = item.resourceURI
+                        let comicId = comicURI.substring(comicURI.lastIndexOf("/") + 1);
                         // eslint-disable-next-line
                         if (i >= 10) return; 
                         return (
-                            <li key={i} className="char__comics-item">
-                                {item.name}
+                            <li key={i}>
+                                <Link to={`/comics/${comicId}`} className="char__comics-item">{item.name}</Link>
                             </li>
                         )
                     }) 
