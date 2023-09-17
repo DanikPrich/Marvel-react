@@ -54,7 +54,7 @@ const CharList = (props) => {
         charRefs.current[i].focus(); 
     }
 
-    const duration = 2000;
+    const duration = 200;
 
     // дефолтные стили которые устанавливают длительность  
     const defaultStyle = {
