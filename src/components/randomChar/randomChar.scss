@@ -5,6 +5,7 @@
     grid-template-columns: repeat(2, 50%);
     align-items: center;
     box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
     &__block {
         padding: 40px 35px;
         display: grid;
@@ -44,6 +45,7 @@
         button {
             margin-top: 13px;
         }
+        border-radius: 0px 8px 8px 0px;
     }
     &__title {
         font-weight: bold;

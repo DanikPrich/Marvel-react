@@ -7,46 +7,48 @@ import './charSearchForm.scss';
 import useMarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
+const setContent = (process, char ) => {
+    switch(process) {
+        case 'waiting':
+            return null
+        case 'loading':
+            return null
+        case 'error':
+            return <ErrorMessage/>
+        case 'confirmed':
+            return char.length > 0 ? <Result char={char}/> : <SearchError />
+        default:
+            throw new Error('Unexpected process state');
+    }
+}
 
 const CharSearchForm = (props) => {
     
     const [char, setChar] = useState(null);
 
-    const {loading, error, getCharacterByName, clearError} = useMarvelService();
+    const {getCharacterByName, clearError, process, setProcess} = useMarvelService();
     
     const onCharLoaded = (char) => {
         setChar(char)
     }
 
-    const updateChar = (charName) => {
+    const updateChar = async (charName) => {
         clearError()
 
-        getCharacterByName(charName)
+        await getCharacterByName(charName)
             .then(onCharLoaded)
+            .then(() => setProcess('confirmed'))
     }
 
-    const result = !char ? null : char.length > 0 ? 
-        <div className='char__search-wrapper'>
-            <div className='char__search-success'>
-                There is! Visit {char[0].name} page?
-            </div>
-            <Link to={`/char/${char[0].id}`} className="button button__secondary">
-                <div className='inner'>To page</div>
-            </Link>
-        </div> : 
-        <div className='char__search-error'>
-            The character is not found. Check the name and try again later
-        </div>
-
-    const errorMessage = error ? <div className='char__search-critical-error'><ErrorMessage/></div> : null
     return (
         <Formik 
             initialValues={{charName: ''}}
             validationSchema={Yup.object({
                 charName: Yup.string().required('This field is required'),
             })}
-            onSubmit={async ({charName}) => {
-                updateChar(charName)
+            onSubmit={async ({charName}, {setSubmitting}) => {
+                await updateChar(charName)
+                setSubmitting(false);
             }}
         >
             {({
@@ -73,19 +75,38 @@ const CharSearchForm = (props) => {
                         <button 
                             type='submit' 
                             className="button button__main"
-                            disabled={loading}
+                            disabled={isSubmitting}
                         >
                             <div className="inner">Find</div>
                         </button>
                     </div>
                     {errors.charName && touched.charName ? <div className='char__search-error'>{errors.charName}</div> : null}
-                    {result}
-                    {errorMessage}
+                    {setContent(process, char)}
                 </form>
             )}
            
         </Formik>
     )
 }
+
+const Result = ({char}) => {
+
+    return (
+        <div className='char__search-wrapper'>
+            <div className='char__search-success'>
+                There is! Visit {char[0].name} page?
+            </div>
+            <Link to={`/char/${char[0].id}`} className="button button__secondary">
+                <div className='inner'>To page</div>
+            </Link>
+        </div>
+    )
+}
+
+const SearchError = () => (
+    <div className='char__search-error'>
+        The character is not found. Check the name and try again later
+    </div>
+)
 
 export default CharSearchForm;

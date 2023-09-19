@@ -4,18 +4,16 @@ import { useState, useEffect} from 'react';
 
 import PropTypes from 'prop-types'
 
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
-import Skeleton from '../skeleton/Skeleton';
+import useMarvelService from '../../services/MarvelService';
+import setContent from '../../utils/setContent';
 
 import './charInfo.scss';
-import useMarvelService from '../../services/MarvelService';
 
 const CharInfo = (props) => {
     
     const [char, setChar] = useState(null);
 
-    const {loading, error, getCharacter, process, setProcess} = useMarvelService();
+    const {getCharacter, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -37,29 +35,6 @@ const CharInfo = (props) => {
     const onCharactersLoaded = (char) => {
         setChar(char);
     }
-
-    const setContent = (process, char) => {
-        switch(process) {
-            case 'waiting':
-                return <Skeleton/>
-            case 'loading':
-                return <Spinner/>
-            case 'error':
-                return <ErrorMessage/>
-            case 'confirmed':
-                return <View char={char}/>
-            default:
-                throw new Error('Unexpected process state');
-        }
-    }
-    
-    /* Условные отрисовки */
-    // Наш компонент имеет 4 состояния - ожидание, ошибка, загрузка и отображение
-    // этот подход тоже рабочий но мы изменим его на принцип state macine и вынесем эту логику в другие компоненты
-    // const skeleton = char || loading || error ? null : <Skeleton/>
-    // const errorMessage = error ? <ErrorMessage/> : null;
-    // const spinner = loading ? <Spinner/> : null;
-    // const content = !(loading || error || !char) ? <View char={char}/> : null
     
 
     return (
@@ -69,16 +44,15 @@ const CharInfo = (props) => {
             {spinner}
             {content} */}
 
-            {setContent(process, char)}
+            {setContent(process, View, char)}
         </div>
     )
 }
 
 /* Это глупый компонент который работает только с пропсами и вырисовывает то что нужно */
-const View = ({char}) => {
+const View = ({data}) => {
     
-
-    const {name, description, thumbnail, homepage, wiki, comics} = char
+    const {name, description, thumbnail, homepage, wiki, comics} = data
 
     const imgStyle = thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg" 
         ? {'objectFit' : 'contain'}
@@ -102,7 +76,7 @@ const View = ({char}) => {
                 </div>
             </div>
             <div className="char__descr">
-                {description ? description.slice(0, char.description.slice(0, 170).lastIndexOf(' ')) + '...' : "Description is missing..."}
+                {description ? description.slice(0, description.slice(0, 170).lastIndexOf(' ')) + '...' : "Description is missing..."}
             </div>
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
