@@ -5,11 +5,15 @@ export const useHttp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // cоздаем еще одно состояние для процесса который будет проиходить
+  const [process, setProcess] = useState('waiting');
+
   /* Создаем функцию запроса с аргументами url, method, body, headers */
   const request = useCallback( async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
 
     /* Если функция вызвалась, загрузка на тру */
     setLoading(true);
+    setProcess('loading');
 
     /* Здесь мы оборачиваем конструкцию чтобы обрабатывать ошибку  */
     try {
@@ -34,12 +38,16 @@ export const useHttp = () => {
     } catch(e) {
       setLoading(false);
       setError(e.message);
+      setProcess('error');
       throw e;
     }
   }, [])
 
   /* Функция обнуления ошибки */
-  const clearError = useCallback(() => setError(null), [])
+  const clearError = useCallback(() => {
+    setError(null)
+    setProcess('loading')
+  }, [])
 
-  return {loading, request, error, clearError}
+  return {loading, request, error, clearError, process, setProcess}
 }

@@ -15,7 +15,7 @@ const CharInfo = (props) => {
     
     const [char, setChar] = useState(null);
 
-    const {loading, error, getCharacter} = useMarvelService();
+    const {loading, error, getCharacter, process, setProcess} = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -28,6 +28,7 @@ const CharInfo = (props) => {
         
         getCharacter(charId)
             .then(onCharactersLoaded)
+            .then(() => setProcess('confirmed'))
         
     }
 
@@ -36,19 +37,39 @@ const CharInfo = (props) => {
     const onCharactersLoaded = (char) => {
         setChar(char);
     }
+
+    const setContent = (process, char) => {
+        switch(process) {
+            case 'waiting':
+                return <Skeleton/>
+            case 'loading':
+                return <Spinner/>
+            case 'error':
+                return <ErrorMessage/>
+            case 'confirmed':
+                return <View char={char}/>
+            default:
+                throw new Error('Unexpected process state');
+        }
+    }
     
     /* Условные отрисовки */
-    const skeleton = char || loading || error ? null : <Skeleton/>
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error || !char) ? <View char={char}/> : null
+    // Наш компонент имеет 4 состояния - ожидание, ошибка, загрузка и отображение
+    // этот подход тоже рабочий но мы изменим его на принцип state macine и вынесем эту логику в другие компоненты
+    // const skeleton = char || loading || error ? null : <Skeleton/>
+    // const errorMessage = error ? <ErrorMessage/> : null;
+    // const spinner = loading ? <Spinner/> : null;
+    // const content = !(loading || error || !char) ? <View char={char}/> : null
+    
 
     return (
         <div className="char__info">
-            {skeleton}
+            {/* {skeleton}
             {errorMessage}
             {spinner}
-            {content}
+            {content} */}
+
+            {setContent(process, char)}
         </div>
     )
 }

@@ -88,7 +88,6 @@ const CharList = (props) => {
                     key={item.id}
                 >
                     {(state) => {
-                        console.log(state)
                         return (
                         <li className="char__item" 
                         style={{
